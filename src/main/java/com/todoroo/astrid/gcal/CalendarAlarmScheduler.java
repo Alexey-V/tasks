@@ -10,6 +10,7 @@ import android.net.Uri;
 import com.todoroo.andlib.utility.DateUtilities;
 
 import org.tasks.R;
+import org.tasks.preferences.PermissionChecker;
 import org.tasks.preferences.Preferences;
 import org.tasks.scheduling.AlarmManager;
 
@@ -23,11 +24,13 @@ public class CalendarAlarmScheduler {
     public static final String URI_PREFIX_POSTPONE = "cal-postpone";
 
     private final Preferences preferences;
+    private PermissionChecker permissionChecker;
     private AlarmManager alarmManager;
 
     @Inject
-    public CalendarAlarmScheduler(Preferences preferences, AlarmManager alarmManager) {
+    public CalendarAlarmScheduler(Preferences preferences, PermissionChecker permissionChecker, AlarmManager alarmManager) {
         this.preferences = preferences;
+        this.permissionChecker = permissionChecker;
         this.alarmManager = alarmManager;
     }
 
@@ -45,6 +48,9 @@ public class CalendarAlarmScheduler {
 
     private void scheduleAllCalendarAlarms(Context context) {
         if (!preferences.getBoolean(R.string.p_calendar_reminders, true)) {
+            return;
+        }
+        if (!permissionChecker.canReadCalendar()) {
             return;
         }
 

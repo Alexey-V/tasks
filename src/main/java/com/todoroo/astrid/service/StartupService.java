@@ -8,8 +8,6 @@ package com.todoroo.astrid.service;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
 
@@ -30,11 +28,11 @@ import com.todoroo.astrid.gtasks.sync.GtasksSyncService;
 import com.todoroo.astrid.provider.Astrid2TaskProvider;
 import com.todoroo.astrid.provider.Astrid3ContentProvider;
 import com.todoroo.astrid.tags.TaskToTagMetadata;
-import com.todoroo.astrid.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tasks.Broadcaster;
+import org.tasks.BuildConfig;
 import org.tasks.R;
 import org.tasks.dialogs.DialogBuilder;
 import org.tasks.preferences.Preferences;
@@ -128,19 +126,10 @@ public class StartupService {
             log.error(e.getMessage(), e);
         }
 
-        int version = 0;
-        String versionName = "0"; //$NON-NLS-1$
-        try {
-            PackageManager pm = activity.getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(Constants.PACKAGE, PackageManager.GET_META_DATA);
-            version = pi.versionCode;
-            versionName = pi.versionName;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+        int version = BuildConfig.VERSION_CODE;
+        String versionName = BuildConfig.VERSION_NAME;
 
-        log.info("astrid", "Astrid Startup. " + latestSetVersion + //$NON-NLS-1$ //$NON-NLS-2$
-                " => " + version); //$NON-NLS-1$
+        log.info("Astrid Startup. {} => {}", latestSetVersion, version);
 
         databaseRestoreIfEmpty(activity);
 

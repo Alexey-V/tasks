@@ -6,17 +6,16 @@ task wrapper(type: Wrapper) {
 
 buildscript {
     repositories {
-        mavenCentral()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.4.0-beta5'
+        classpath 'com.android.tools.build:gradle:1.4.0-beta6'
     }
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 android {
@@ -24,14 +23,14 @@ android {
         lintConfig file("lint.xml")
     }
 
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         versionCode 375
         versionName "4.7.19"
         minSdkVersion 7
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
 
     signingConfigs {
@@ -89,7 +88,7 @@ dependencies {
 
     compile group: 'com.jakewharton', name: 'butterknife', version: '6.0.0'
 
-    compile group: 'com.android.support', name: 'design', version: '22.2.1'
+    compile group: 'com.android.support', name: 'design', version: '23.0.1'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.7'
 
@@ -100,7 +99,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
     }
 
-    googleplayCompile group: 'com.google.android.gms', name: 'play-services-location', version: '7.5.0'
+    googleplayCompile group: 'com.google.android.gms', name: 'play-services-location', version: '8.1.0'
 
     compile(group: 'com.google.apis', name: 'google-api-services-tasks', version: 'v1-rev33-1.18.0-rc') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'

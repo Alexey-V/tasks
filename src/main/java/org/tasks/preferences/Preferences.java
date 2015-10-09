@@ -14,11 +14,11 @@ import com.todoroo.astrid.data.Task;
 import com.todoroo.astrid.data.TaskAttachment;
 import com.todoroo.astrid.widget.WidgetConfigActivity;
 
-import org.tasks.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tasks.R;
 import org.tasks.injection.ForApplication;
+import org.tasks.time.DateTime;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
@@ -48,7 +48,7 @@ public class Preferences {
     private static final String FILE_APPENDER_NAME = "FILE";
 
     protected final Context context;
-    private DeviceInfo deviceInfo;
+    private final DeviceInfo deviceInfo;
     private final SharedPreferences prefs;
     private final SharedPreferences publicPrefs;
 
@@ -116,6 +116,10 @@ public class Preferences {
 
     public String getStringValue(int keyResource) {
         return prefs.getString(context.getResources().getString(keyResource), null);
+    }
+
+    public boolean isStringValueSet(int keyResource) {
+        return !TextUtils.isEmpty(getStringValue(keyResource));
     }
 
     public int getDefaultReminders() {
@@ -318,19 +322,17 @@ public class Preferences {
         }
 
         if (directory == null || !directory.exists()) {
-            directory = getExternalFilesDir(TaskAttachment.FILES_DIRECTORY_DEFAULT);
+            directory = getDefaultFileLocation(TaskAttachment.FILES_DIRECTORY_DEFAULT);
         }
 
         return directory;
     }
 
-    private File getExternalFilesDir(String type) {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String directory = String.format("%s/Android/data/%s/files/%s", Environment.getExternalStorageDirectory(), context.getPackageName(), type);
-            File file = new File(directory);
-            if (file.isDirectory() || file.mkdirs()) {
-                return file;
-            }
+    private File getDefaultFileLocation(String type) {
+        String directory = String.format("%s/%s", context.getApplicationInfo().dataDir, type);
+        File file = new File(directory);
+        if (file.isDirectory() || file.mkdirs()) {
+            return file;
         }
 
         return null;
@@ -372,22 +374,9 @@ public class Preferences {
         }
 
         if (directory == null || !directory.exists()) {
-            directory = defaultExportDirectory();
+            directory = getDefaultFileLocation("backups");
         }
 
         return directory;
-    }
-
-    /**
-     * @return export directory for tasks, or null if no SD card
-     */
-    private static File defaultExportDirectory() {
-        String storageState = Environment.getExternalStorageState();
-        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            path = path + "/astrid";
-            return new File(path);
-        }
-        return null;
     }
 }
