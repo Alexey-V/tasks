@@ -45,4 +45,37 @@
             android:targetPackage="org.tasks" />
     </Preference>
 
+    <PreferenceCategory
+        android:key="@string/calendar_integration"
+        android:title="@string/calendar_integration">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/p_calendar_enabled"
+            android:title="@string/enabled" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="@string/p_calendar_enabled"
+            android:key="@string/p_calendar_reminders"
+            android:summary="@string/CRA_calendar_reminders_pref_desc_enabled"
+            android:title="@string/CRA_calendar_reminders_pref_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="@string/p_calendar_enabled"
+            android:key="@string/p_end_at_deadline"
+            android:summaryOff="@string/EPr_cal_end_at_due_time"
+            android:summaryOn="@string/EPr_cal_start_at_due_time"
+            android:title="@string/EPr_cal_end_or_start_at_due_time" />
+
+        <com.todoroo.astrid.ui.MultilineListPreference
+            android:defaultValue="-1"
+            android:dependency="@string/p_calendar_enabled"
+            android:entries="@array/EPr_default_addtocalendar"
+            android:entryValues="@array/EPr_default_addtocalendar_values"
+            android:key="@string/gcal_p_default"
+            android:title="@string/default_calendar" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

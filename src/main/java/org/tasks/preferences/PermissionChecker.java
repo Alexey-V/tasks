@@ -9,7 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tasks.injection.ForApplication;
 
+import java.util.List;
+
 import javax.inject.Inject;
+
+import static java.util.Arrays.asList;
 
 public class PermissionChecker {
 
@@ -22,8 +26,8 @@ public class PermissionChecker {
         this.context = context;
     }
 
-    public boolean canReadCalendar() {
-        return checkPermission(Manifest.permission.READ_CALENDAR);
+    public boolean canAccessCalendars() {
+        return checkPermissions(asList(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR));
     }
 
     public boolean canWriteToExternalStorage() {
@@ -31,10 +35,16 @@ public class PermissionChecker {
     }
 
     private boolean checkPermission(String permission) {
-        boolean result = ActivityCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
-        if (!result) {
-            log.warn("Request for {} denied", permission);
+        return checkPermissions(asList(permission));
+    }
+
+    private boolean checkPermissions(List<String> permissions) {
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                log.warn("Request for {} denied", permission);
+                return false;
+            }
         }
-        return result;
+        return true;
     }
 }

@@ -14,8 +14,7 @@
   <!-- slide 43e: Preference: Default Reminders Title -->
   <string name="EPr_default_reminders_title">Default reminders</string>
 
-  <!-- slide 19a/46c: Preference: Default Add To Calendar Title -->
-  <string name="EPr_default_addtocalendar_title">Default add to calendar</string>
+  <string name="default_calendar">Default Calendar</string>
 
   <!-- slide 45d: Reminder Mode Preference: Default Reminders Duration -->
   <string name="EPr_default_reminders_mode_title">Default ring/vibrate type</string>

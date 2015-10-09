@@ -7,7 +7,6 @@ package com.todoroo.astrid.service;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,7 +19,6 @@ import com.todoroo.astrid.data.TaskAttachment;
 import org.tasks.BuildConfig;
 import org.tasks.R;
 import org.tasks.dialogs.DialogBuilder;
-import org.tasks.injection.ForApplication;
 import org.tasks.injection.InjectingAppCompatActivity;
 import org.tasks.preferences.Preferences;
 
@@ -62,7 +60,6 @@ public final class UpgradeService {
 
         @Inject DialogBuilder dialogBuilder;
         @Inject Preferences preferences;
-        @Inject @ForApplication Context context;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +99,9 @@ public final class UpgradeService {
         }
 
         private void performMarshmallowMigration() {
+
+            preferences.setBoolean(R.string.p_calendar_enabled, true);
+
             // preserve pre-marshmallow default attachment and backup locations
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 if (!preferences.isStringValueSet(R.string.p_backup_dir)) {
@@ -116,7 +116,7 @@ public final class UpgradeService {
                 if (!preferences.isStringValueSet(R.string.p_attachment_dir)) {
                     String directory = String.format("%s/Android/data/%s/files/%s",
                             Environment.getExternalStorageDirectory(),
-                            context.getPackageName(),
+                            BuildConfig.APPLICATION_ID,
                             TaskAttachment.FILES_DIRECTORY_DEFAULT);
                     File file = new File(directory);
                     if (file.exists() && file.isDirectory()) {

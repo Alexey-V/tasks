@@ -47,10 +47,13 @@ public class CalendarAlarmScheduler {
     }
 
     private void scheduleAllCalendarAlarms(Context context) {
+        if (!preferences.getBoolean(R.string.p_calendar_enabled, false)) {
+            return;
+        }
         if (!preferences.getBoolean(R.string.p_calendar_reminders, true)) {
             return;
         }
-        if (!permissionChecker.canReadCalendar()) {
+        if (!permissionChecker.canAccessCalendars()) {
             return;
         }
 

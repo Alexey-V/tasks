@@ -47,7 +47,8 @@ public class GCalHelper {
     private final Preferences preferences;
 
     @Inject
-    public GCalHelper(@ForApplication Context context, TaskService taskService, Preferences preferences) {
+    public GCalHelper(@ForApplication Context context, TaskService taskService,
+                      Preferences preferences) {
         this.context = context;
         this.taskService = taskService;
         this.preferences = preferences;

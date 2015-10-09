@@ -9,6 +9,7 @@ import javax.inject.Inject;
 public class PermissionRequestor {
 
     public static final int REQUEST_FILE_WRITE = 50;
+    public static final int REQUEST_CALENDAR = 51;
 
     private final Activity activity;
     private final PermissionChecker permissionChecker;
@@ -27,7 +28,21 @@ public class PermissionRequestor {
         return false;
     }
 
+    public boolean requestCalendarPermissions() {
+        if (permissionChecker.canAccessCalendars()) {
+            return true;
+        }
+        requestPermissions(
+                new String[] { Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+                REQUEST_CALENDAR);
+        return false;
+    }
+
     private void requestPermission(String permission, int rc) {
-        ActivityCompat.requestPermissions(activity, new String[]{permission}, rc);
+        requestPermissions(new String[] {permission}, rc);
+    }
+
+    private void requestPermissions(String[] permissions, int rc) {
+        ActivityCompat.requestPermissions(activity, permissions, rc);
     }
 }
