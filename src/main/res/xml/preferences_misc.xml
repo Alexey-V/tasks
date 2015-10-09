@@ -12,7 +12,4 @@
         android:summary="@string/EPr_voiceRemindersEnabled_desc_enabled"
         android:title="@string/EPr_voiceRemindersEnabled_title" />
 
-    <CheckBoxPreference
-        android:key="@string/p_debug_logging"
-        android:title="@string/debug_logging" />
 </PreferenceScreen>

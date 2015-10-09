@@ -32,14 +32,6 @@ public class MiscellaneousPreferences extends InjectingPreferenceActivity {
 
         addPreferencesFromResource(R.xml.preferences_misc);
 
-        findPreference(getString(R.string.p_debug_logging)).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preferences.setupLogger((boolean) newValue);
-                return true;
-            }
-        });
-
         initializeAttachmentDirectoryPreference();
         initializeVoiceReminderPreference();
     }

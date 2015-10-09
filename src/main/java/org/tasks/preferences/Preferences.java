@@ -49,13 +49,15 @@ public class Preferences {
 
     protected final Context context;
     private final DeviceInfo deviceInfo;
+    private final PermissionChecker permissionChecker;
     private final SharedPreferences prefs;
     private final SharedPreferences publicPrefs;
 
     @Inject
-    public Preferences(@ForApplication Context context, DeviceInfo deviceInfo) {
+    public Preferences(@ForApplication Context context, DeviceInfo deviceInfo, PermissionChecker permissionChecker) {
         this.context = context;
         this.deviceInfo = deviceInfo;
+        this.permissionChecker = permissionChecker;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         publicPrefs = context.getSharedPreferences(AstridApiConstants.PUBLIC_PREFS, Context.MODE_WORLD_READABLE);
     }
@@ -260,7 +262,9 @@ public class Preferences {
     }
 
     public void setupLogger() {
-        setupLogger(getBoolean(R.string.p_debug_logging, false));
+        if (permissionChecker.canWriteToExternalStorage()) {
+            setupLogger(getBoolean(R.string.p_debug_logging, false));
+        }
     }
 
     public void setupLogger(boolean enableDebugLogging) {

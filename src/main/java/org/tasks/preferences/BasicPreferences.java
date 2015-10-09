@@ -61,8 +61,6 @@ public class BasicPreferences extends InjectingPreferenceActivity {
         setupActivity(R.string.EPr_manage_header, OldTaskPreferences.class);
 
         calendarIntegrationPreference = (CheckBoxPreference) findPreference(getString(R.string.p_calendar_enabled));
-        boolean integrationEnabled = preferences.getBoolean(R.string.p_calendar_enabled, false) &&
-                permissionChecker.canAccessCalendars();
         calendarIntegrationPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -74,7 +72,9 @@ public class BasicPreferences extends InjectingPreferenceActivity {
                 return true;
             }
         });
-        enableCalendarIntegration(integrationEnabled);
+        enableCalendarIntegration(
+                preferences.getBoolean(R.string.p_calendar_enabled, false) &&
+                permissionChecker.canAccessCalendars());
     }
 
     private void enableCalendarIntegration(boolean enabled) {
