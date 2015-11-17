@@ -28,6 +28,8 @@ import com.todoroo.astrid.dao.TagDataDao;
 import com.todoroo.astrid.data.Metadata;
 import com.todoroo.astrid.data.TagData;
 import com.todoroo.astrid.data.Task;
+import com.todoroo.astrid.security.Encryption;
+import com.todoroo.astrid.security.EncryptionKey;
 import com.todoroo.astrid.service.TaskService;
 import com.todoroo.astrid.tags.TaskToTagMetadata;
 
@@ -350,7 +352,16 @@ public class TasksXmlImporter {
                     AbstractModel data) {
                 String value = xpp.getAttributeValue(null, property.name);
                 if(value != null) {
-                    data.setValue(property, value);
+                    //System.err.println("-----String before: " + value);
+                    if(EncryptionKey.securityMode) {
+                        Encryption.setKey("123456");
+                        Encryption.decrypt(value);
+                        String decryptedValue = Encryption.getDecryptedString();
+                        data.setValue(property, decryptedValue);
+                    } else {
+                        //System.err.println("-----String after: " + value1);
+                        data.setValue(property, value);
+                    }
                 }
                 return null;
             }

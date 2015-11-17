@@ -19,6 +19,8 @@
 
     <string name="p_attachment_dir">custom_files_dir</string>
   <string name="p_backup_dir">p_backup_dir</string>
+  <string name="p_encryp_mode">p_encryp_mode</string>
+  <string name="p_encryp_key">p_encryp_key</string>
     <string name="p_rmd_enabled">notif_enabled</string>
   <!-- boolean : whether to enable quiet hours or not -->
   <string name="p_rmd_enable_quiet">enable_qhours</string>

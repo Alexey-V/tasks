@@ -26,4 +26,20 @@
             android:targetPackage="org.tasks" />
     </Preference>
 
+    <Preference
+        android:key="@string/p_encryp_mode"
+        android:title="@string/encryption_mode">
+        <intent
+            android:targetClass="org.tasks.activities.EncryptModeActivity"
+            android:targetPackage="org.tasks" />
+    </Preference>
+
+    <Preference
+        android:key="@string/p_encryp_key"
+        android:title="@string/encryption_password">
+        <intent
+            android:targetClass="org.tasks.activities.EncryptKeyActivity"
+            android:targetPackage="org.tasks" />
+    </Preference>
+
 </PreferenceScreen>

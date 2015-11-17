@@ -26,6 +26,8 @@ import com.todoroo.astrid.dao.TagDataDao;
 import com.todoroo.astrid.data.Metadata;
 import com.todoroo.astrid.data.TagData;
 import com.todoroo.astrid.data.Task;
+import com.todoroo.astrid.security.Encryption;
+import com.todoroo.astrid.security.EncryptionKey;
 import com.todoroo.astrid.service.TaskService;
 
 import org.slf4j.Logger;
@@ -63,6 +65,10 @@ public class TasksXmlExporter {
     private final MetadataDao metadataDao;
     private final TaskService taskService;
     private final Preferences preferences;
+
+    private static Preferences preference;
+
+    public static int OuO;
 
     // 3 is started on Version 4.6.10
     private static final int FORMAT = 3;
@@ -309,7 +315,48 @@ public class TasksXmlExporter {
                 if(value == null) {
                     return null;
                 }
-                xml.attribute(null, property.name, value);
+
+                String te = preferences.getStringValue(R.string.p_encryp_mode);
+                //System.err.println("----------/n--/n---/n-------: " + te.length());
+
+                // Give the default value before user switch the mode first time
+                if (te != null) {
+                    OuO = Integer.valueOf(preferences.getStringValue(R.string.p_encryp_mode));
+                    //preferences.setString(R.string.p_encryp_mode3, "1");
+                } else {
+                    //OuO = Integer.valueOf(preferences.getStringValue(R.string.p_encryp_mode3));
+                    preferences.setString(R.string.p_encryp_mode, "1");
+                }
+
+                //System.err.println("----------/n--/n---/n-------: " + OuO);
+
+                if (OuO == 0) {
+                    //Encryption.setKey("123456");
+                    //Encryption.encrypt("我 是 一 个 好 人");
+                    //Encryption.decrypt("WIEx0YtbAGUUAglLAdLw2vmMDimSwN3ZdmmI22Odp6o=");
+                    //Encryption.decrypt("0ku3E6cCcPcTekpFfjumaA==");
+                    //String value1 = Encryption.getEncryptedStr();
+                    //String value2 = Encryption.getDecryptedString();
+                    //System.err.println("-----String: " + value2);
+
+                    String tk = preferences.getStringValue(R.string.p_encryp_key);
+                    System.err.println("----------/n--/n---/n-------: " + tk);
+                    if (tk != null) {
+                        Encryption.setKey(preferences.getStringValue(R.string.p_encryp_mode));
+                    } else {
+                        Encryption.setKey("123456");
+                    }
+
+                    Encryption.encrypt(value);
+                    String encryptedValue = Encryption.getEncryptedStr();
+                    xml.attribute(null, property.name, encryptedValue);
+                } else {
+                    //Encryption.setKey("123456");
+                    //Encryption.encrypt(value);
+                    //String value1 = Encryption.getEncryptedStr();
+                    //System.err.println("-----String: " + value1);
+                    xml.attribute(null, property.name, value);
+                }
             } catch (UnsupportedOperationException e) {
                 // didn't read this value, do nothing
                 log.trace(e.getMessage(), e);
