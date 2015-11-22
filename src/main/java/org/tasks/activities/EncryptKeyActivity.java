@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.todoroo.astrid.security.Encryption;
-
 import javax.inject.Inject;
 import org.tasks.R;
 import org.tasks.injection.InjectingAppCompatActivity;
