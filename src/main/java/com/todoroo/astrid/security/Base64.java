@@ -1,5 +1,12 @@
 package com.todoroo.astrid.security;
 
+/**
+ * This class processes encryption.
+ * Due to the test results, in some device the Android build-in
+ * encryption function does not work.
+ * @author Jiayu
+ */
+
 /***************************************************************
 
  Copyright (c) 1998, 1999 Nate Sammons <nate@protomatter.com>

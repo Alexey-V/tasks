@@ -123,7 +123,7 @@
     <string name="get_plugins">Get Plug-ins</string>
     <string name="encryption_mode">Encryption mode</string>
     <string name="encryption_password">Set password</string>
-    <string name="encryption_yes">Yes</string>
+    <string name="encryption_yes">Set</string>
     <string name="encryption_cancel">Cancel</string>
 
     <string-array name="sync_SPr_interval_entries">
