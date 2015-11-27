@@ -594,10 +594,11 @@ public class TaskAdapter extends CursorAdapter implements Filterable {
     // Returns due date text width
     private void setupDueDateAndTags(ViewHolder viewHolder, Task task) {
         // due date / completion date
-        final TextView dueDateView = viewHolder.dueDate; {
+        final TextView dueDateView = viewHolder.dueDate;{
             Activity activity = fragment.getActivity();
             if (activity != null) {
                 if(!task.isCompleted() && task.hasDueDate()) {
+                    long startDate = task.getStartDate();
                     long dueDate = task.getDueDate();
                     if(task.isOverdue()) {
                         dueDateView.setTextAppearance(activity, R.style.TextAppearance_TAd_ItemDueDate_Overdue);
@@ -607,6 +608,7 @@ public class TaskAdapter extends CursorAdapter implements Filterable {
                     String dateValue = formatDate(dueDate);
                     dueDateView.setText(dateValue);
                     dueDateView.setVisibility(View.VISIBLE);
+
                 } else if(task.isCompleted()) {
                     String dateValue = formatDate(task.getCompletionDate());
                     dueDateView.setText(resources.getString(R.string.TAd_completed, dateValue));

@@ -52,28 +52,11 @@ public class BackupPreferences extends InjectingPreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference p) {
 
-                /*Intent filesDir = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent filesDir = new Intent(Intent.ACTION_GET_CONTENT);
                 filesDir.putExtra(FileExplore.EXTRA_DIRECTORIES_SELECTABLE, true);
                 filesDir.setType("xml/*");
-                startActivityForResult(filesDir, PICKFILE_RESULT_CODE);*/
+                startActivityForResult(filesDir, PICKFILE_RESULT_CODE);
 
-               /* Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
-                        .addCategory(Intent.CATEGORY_OPENABLE)
-                        .setType(DocumentsContract.Document.MIME_TYPE_DIR)
-                        .putExtra(FileExplore.EXTRA_DIRECTORIES_SELECTABLE, true);
-
-                startActivityForResult(intent, PICKFILE_RESULT_CODE); */
-
-                //----------------------------------------------------------------
-                /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-                        + "/myFolder/");
-                intent.setDataAndType(uri, "text/xml");
-                startActivity(Intent.createChooser(intent, "Open folder")); */
-
-                Intent filesDir = new Intent(BackupPreferences.this, FileExplore.class);
-                filesDir.putExtra(FileExplore.EXTRA_DIRECTORIES_SELECTABLE, true);
-                startActivityForResult(filesDir, REQUEST_CODE_BACKUP_DIR);
                 return true;
             }
         });

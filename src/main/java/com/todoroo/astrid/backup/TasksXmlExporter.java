@@ -160,7 +160,7 @@ public class TasksXmlExporter {
     private String setupFile(File directory, ExportType exportType) throws IOException {
         if (directory != null) {
             // Check for /sdcard/astrid directory. If it doesn't exist, make it.
-            if (directory.exists() ) { //|| directory.mkdir()
+            if (directory.exists() || directory.mkdir()) {
                 String fileName;
                 switch(exportType) {
                     case EXPORT_TYPE_SERVICE:

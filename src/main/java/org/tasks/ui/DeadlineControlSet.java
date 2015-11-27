@@ -58,6 +58,7 @@ public class DeadlineControlSet extends TaskEditControlSetBase {
 
     private FragmentActivity activity;
     private Spinner DateSpinner;
+    private Spinner startDateSpinner;
     private Spinner TimeSpinner;
     private View clearButton;
     private ArrayAdapter<String> DateAdapter;
@@ -115,12 +116,12 @@ public class DeadlineControlSet extends TaskEditControlSetBase {
         return date;
     }
     private void refreshDisplayView() {
-        updateDueDateOptions();
+        updateDateOptions();
         updateDueTimeOptions();
         clearButton.setVisibility(date > 0 ? View.VISIBLE : View.GONE);
     }
 
-    private void updateDueDateOptions() {
+    private void updateDateOptions() {
         DateTime today = newDateTime().withMillisOfDay(0);
         String nextWeekString = activity.getString(R.string.next, today.plusWeeks(1).toString("EEEE"));
         if (date == 0) {
@@ -142,8 +143,15 @@ public class DeadlineControlSet extends TaskEditControlSetBase {
 
         }
         DateOptions.set(3, nextWeekString);
-        DateAdapter.notifyDataSetChanged();
-        DateSpinner.setSelection(0);
+       // if(!isStart) {
+            DateAdapter.notifyDataSetChanged();
+            DateSpinner.setSelection(0);
+        //}
+        /*else
+        {
+            startDateAdapter.notifyDataSetChanged();
+            startDateSpinner.setSelection(0);
+        }*/
 
     }
 
