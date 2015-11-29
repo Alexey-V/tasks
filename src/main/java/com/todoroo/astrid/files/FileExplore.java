@@ -62,7 +62,6 @@ public class FileExplore extends InjectingAppCompatActivity {
 	private String upString;
 	private boolean directoryMode;
 	private ListAdapter adapter;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

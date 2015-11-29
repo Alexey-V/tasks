@@ -3,6 +3,7 @@ package org.tasks.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -21,7 +22,11 @@ import org.tasks.R;
 import org.tasks.injection.ForApplication;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -51,6 +56,8 @@ public class Preferences {
     private DeviceInfo deviceInfo;
     private final SharedPreferences prefs;
     private final SharedPreferences publicPrefs;
+
+    private static final Pattern DIR_DELIMMITER = Pattern.compile("/");
 
     @Inject
     public Preferences(@ForApplication Context context, DeviceInfo deviceInfo) {
@@ -384,10 +391,76 @@ public class Preferences {
     private static File defaultExportDirectory() {
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            path = path + "/astrid";
-            return new File(path);
+           final String [] storageDir = getExternalStorage();
+           int index = 0;
+
+            for (String s: storageDir) {
+               if(s.contains("sdcard")) {
+                  return new File(storageDir[index]);
+                }
+               index = index + 1;
+             }
+
+           String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+           path = path + "/astrid";
+           return new File (path);
         }
         return null;
+    }
+
+    /**
+     * Raturns available SD cards
+     */
+    public static String[] getExternalStorage()
+    {
+
+        final Set<String> allPaths = new HashSet<String>();  // Final set of paths
+        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE"); //  physical SD-CARD
+        final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");  // All Secondary SD-CARDs
+        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET"); // Primary emulated SD-CARD
+
+        if(TextUtils.isEmpty(rawEmulatedStorageTarget))
+        {
+            if(TextUtils.isEmpty(rawExternalStorage)) // Device has physical external storage; use plain paths.
+                allPaths.add("/storage/sdcard0"); // EXTERNAL_STORAGE undefined; falling back to default.
+            else
+                allPaths.add(rawExternalStorage);
+        }
+        else
+        {
+            // Device with emulated storage; external storage paths should have userId burned into them.
+            final String rawUsrId;
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) //if running on version below Jelly Bean.
+                rawUsrId = "";
+            else
+            {
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                path = path + "/astrid";
+                final String[] folders = DIR_DELIMMITER.split(path);
+                final String lastFolder = folders[folders.length - 1];
+                boolean isDigit = false;
+                try
+                {
+                    Integer.valueOf(lastFolder);
+                    isDigit = true;
+                }
+                catch(NumberFormatException ignored)
+                {
+                }
+                rawUsrId = isDigit ? lastFolder : "";
+            }
+            // /storage/emulated/0,1,2,...
+            if(TextUtils.isEmpty(rawUsrId))
+                allPaths.add(rawEmulatedStorageTarget);
+            else
+                allPaths.add(rawEmulatedStorageTarget + File.separator + rawUsrId);
+        }
+
+        if(!TextUtils.isEmpty(rawSecondaryStoragesStr)) // Add all secondary storages
+        {
+            final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator); // All Secondary SD-CARDs splited into array
+            Collections.addAll(allPaths, rawSecondaryStorages);
+        }
+        return allPaths.toArray(new String[allPaths.size()]);
     }
 }

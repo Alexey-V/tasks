@@ -51,7 +51,6 @@ public class BackupPreferences extends InjectingPreferenceActivity {
                 new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference p) {
-
                 Intent filesDir = new Intent(Intent.ACTION_GET_CONTENT);
                 filesDir.putExtra(FileExplore.EXTRA_DIRECTORIES_SELECTABLE, true);
                 filesDir.setType("xml/*");
