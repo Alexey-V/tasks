@@ -23,6 +23,7 @@ import com.todoroo.astrid.reminders.ReminderPreferences;
 import com.todoroo.astrid.service.UpgradeService;
 import com.todoroo.astrid.widget.WidgetConfigActivity;
 
+import org.tasks.activities.BackupCycleActivity;
 import org.tasks.activities.ClearAllDataActivity;
 import org.tasks.activities.ClearGtaskDataActivity;
 import org.tasks.activities.DeleteAllCalendarEventsActivity;
@@ -39,6 +40,7 @@ import org.tasks.preferences.AppearancePreferences;
 import org.tasks.preferences.BackupPreferences;
 import org.tasks.preferences.BasicPreferences;
 import org.tasks.preferences.DateShortcutPreferences;
+import org.tasks.preferences.DeveloperModePreferences;
 import org.tasks.preferences.HelpAndFeedbackActivity;
 import org.tasks.preferences.MiscellaneousPreferences;
 import org.tasks.reminders.MissedCallActivity;
@@ -74,6 +76,7 @@ import dagger.Provides;
                 AACRecordingActivity.class,
                 SnoozeActivity.class,
                 MiscellaneousPreferences.class,
+                BackupCycleActivity.class,
                 ImportTaskActivity.class,
                 ExportTaskActivity.class,
                 ClearAllDataActivity.class,
@@ -94,19 +97,20 @@ import dagger.Provides;
                 FileExplore.class,
                 DonationActivity.class,
                 ActFmGoogleAuthActivity.class,
-                UpgradeService.UpgradeActivity.class
+                UpgradeService.UpgradeActivity.class,
+                DeveloperModePreferences.class
         })
 public class ActivityModule {
 
-    private final Activity activity;
+        private final Activity activity;
 
-    public ActivityModule(Activity activity) {
-        this.activity = activity;
-    }
+        public ActivityModule(Activity activity) {
+                this.activity = activity;
+        }
 
-    @Singleton
-    @Provides
-    public Activity getActivity() {
-        return activity;
-    }
+        @Singleton
+        @Provides
+        public Activity getActivity() {
+                return activity;
+        }
 }
