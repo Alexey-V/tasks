@@ -28,6 +28,7 @@ import com.todoroo.astrid.dao.TagDataDao;
 import com.todoroo.astrid.data.Metadata;
 import com.todoroo.astrid.data.TagData;
 import com.todoroo.astrid.data.Task;
+import com.todoroo.astrid.security.Encryption;
 import com.todoroo.astrid.service.TaskService;
 import com.todoroo.astrid.tags.TaskToTagMetadata;
 
@@ -35,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tasks.R;
 import org.tasks.dialogs.DialogBuilder;
+import org.tasks.preferences.Preferences;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -62,6 +64,9 @@ public class TasksXmlImporter {
     private ProgressDialog progressDialog;
     private Runnable runAfterImport;
     private String input;
+
+    @Inject
+    Preferences preferences;
 
     private void setProgressMessage(final String message) {
         handler.post(new Runnable() {
@@ -350,7 +355,25 @@ public class TasksXmlImporter {
                     AbstractModel data) {
                 String value = xpp.getAttributeValue(null, property.name);
                 if(value != null) {
-                    data.setValue(property, value);
+                    // Decrypt the strings of a task
+                    String encryptionMode = preferences.getStringValue(R.string.p_encrypt_mode);
+                    // The encryption mode is on
+                    if(encryptionMode.equals("0")) {
+                        String encryptionKey = preferences.getStringValue(R.string.p_encrypt_key);
+                        if (encryptionKey != null) {
+                            Encryption.setKey(encryptionKey);
+                        // The encryption mode is off
+                        } else {
+                            // Set the default key
+                            Encryption.setKey("123456");
+                        }
+                        Encryption.decrypt(value);
+                        String decryptedValue = Encryption.getDecryptedString();
+                        data.setValue(property, decryptedValue);
+                    // The encryption mode is off
+                    } else {
+                        data.setValue(property, value);
+                    }
                 }
                 return null;
             }

@@ -454,6 +454,12 @@
         <activity
             android:name="org.tasks.activities.ImportTaskActivity"
             android:theme="@style/TranslucentDialog" />
+        <activity
+            android:name="org.tasks.activities.EncryptModeActivity"
+            android:theme="@style/TranslucentDialog" />
+        <activity
+            android:name="org.tasks.activities.EncryptKeyActivity"
+            android:theme="@style/TranslucentDialog" />
 
         <!-- premium -->
         <activity

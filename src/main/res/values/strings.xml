@@ -123,6 +123,10 @@
     <string name="reverse">Reverse</string>
     <string name="task_count">%s Tasks</string>
     <string name="get_plugins">Get Plug-ins</string>
+    <string name="encryption_mode">Encryption mode</string>
+    <string name="encryption_password">Set password</string>
+    <string name="encryption_yes">Set</string>
+    <string name="encryption_cancel">Cancel</string>
 
     <string-array name="sync_SPr_interval_entries">
         <!-- sync_SPr_interval_entries: Synchronization Intervals -->

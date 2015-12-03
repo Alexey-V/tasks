@@ -26,6 +26,7 @@ import com.todoroo.astrid.dao.TagDataDao;
 import com.todoroo.astrid.data.Metadata;
 import com.todoroo.astrid.data.TagData;
 import com.todoroo.astrid.data.Task;
+import com.todoroo.astrid.security.Encryption;
 import com.todoroo.astrid.service.TaskService;
 
 import org.slf4j.Logger;
@@ -63,6 +64,10 @@ public class TasksXmlExporter {
     private final MetadataDao metadataDao;
     private final TaskService taskService;
     private final Preferences preferences;
+
+    private static Preferences preference;
+
+    public static int savedEncryptionValue;
 
     // 3 is started on Version 4.6.10
     private static final int FORMAT = 3;
@@ -309,7 +314,35 @@ public class TasksXmlExporter {
                 if(value == null) {
                     return null;
                 }
-                xml.attribute(null, property.name, value);
+
+                // Encrypt the strings of a task
+                String encryptionMode = preferences.getStringValue(R.string.p_encrypt_mode);
+
+                // Give the default value before user switch the mode first time
+                if (encryptionMode != null) {
+                    savedEncryptionValue = Integer.valueOf(preferences.getStringValue(R.string.p_encrypt_mode));
+                } else {
+                    preferences.setString(R.string.p_encrypt_mode, "1");
+                }
+
+                // The encryption mode is on
+                if (savedEncryptionValue == 0) {
+                    String encryptionKey = preferences.getStringValue(R.string.p_encrypt_key);
+                    if (encryptionKey != null) {
+                        Encryption.setKey(encryptionKey);
+                    // The encryption mode is off
+                    } else {
+                        // Set the default key
+                        Encryption.setKey("123456");
+                    }
+                    Encryption.encrypt(value);
+                    String encryptedValue = Encryption.getEncryptedStr();
+                    xml.attribute(null, property.name, encryptedValue);
+                // The encryption mode is off
+                } else {
+                    xml.attribute(null, property.name, value);
+                }
+
             } catch (UnsupportedOperationException e) {
                 // didn't read this value, do nothing
                 log.trace(e.getMessage(), e);

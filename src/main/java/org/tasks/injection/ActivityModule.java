@@ -29,6 +29,8 @@ import org.tasks.activities.DeleteAllCalendarEventsActivity;
 import org.tasks.activities.DeleteCompletedActivity;
 import org.tasks.activities.DeleteCompletedEventsActivity;
 import org.tasks.activities.DonationActivity;
+import org.tasks.activities.EncryptKeyActivity;
+import org.tasks.activities.EncryptModeActivity;
 import org.tasks.activities.ExportTaskActivity;
 import org.tasks.activities.FilterSelectionActivity;
 import org.tasks.activities.ImportTaskActivity;
@@ -94,7 +96,9 @@ import dagger.Provides;
                 FileExplore.class,
                 DonationActivity.class,
                 ActFmGoogleAuthActivity.class,
-                UpgradeService.UpgradeActivity.class
+                UpgradeService.UpgradeActivity.class,
+                EncryptModeActivity.class,
+                EncryptKeyActivity.class
         })
 public class ActivityModule {
 
